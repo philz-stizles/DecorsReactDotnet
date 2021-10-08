@@ -38,6 +38,19 @@ namespace Decors.API
 
             services.AddInfrastructureServices(Configuration);
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("BasePolicy", policy =>
+                {
+                    var allowedOrigins = Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>();
+                    policy
+                        .WithOrigins(allowedOrigins)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+
             services.AddControllers();
         }
 
@@ -56,6 +69,10 @@ namespace Decors.API
             }
 
             app.UseRouting();
+
+            app.UseStaticFiles();
+
+            app.UseCors("BasePolicy");
 
             // Use Authentication & Authorization Services in Pipeline.
             app.UseAuthServices();

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
+// using Microsoft.Extensions.DependencyInjection;
 
 namespace Decors.API.Controllers
 {
@@ -8,7 +8,12 @@ namespace Decors.API.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
-        private IMediator _mediator;
-        protected IMediator Mediator => _mediator ?? (_mediator = HttpContext.RequestServices.GetService<IMediator>());
+        protected IMediator Mediator;
+        // protected IMediator Mediator => _mediator ?? (_mediator = HttpContext.RequestServices.GetService<IMediator>());
+
+        public BaseController(IMediator mediator)
+        {
+            Mediator = mediator;
+        }
     }
 }

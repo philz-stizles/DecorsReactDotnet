@@ -21,9 +21,10 @@
 
   <ItemGroup>
     <Folder Include="Persistence\Caching\" />
-    <Folder Include="Services\Notification\" />
+    <Folder Include="Services\MessageQueue\" />
+    <Folder Include="Services\Indexing\" />
+    <Folder Include="Services\SocialLogin\" />
     <Folder Include="Services\Storage\" />
-    <Folder Include="Services\Payment\" />
   </ItemGroup>
 
 </Project>

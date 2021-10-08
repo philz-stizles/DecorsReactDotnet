@@ -1,4 +1,5 @@
 ﻿using Decors.Application.Services.Auth;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -6,6 +7,10 @@ namespace Decors.API.Controllers
 {
     public class AuthController : BaseController
     {
+
+        public AuthController(IMediator mediator) : base(mediator) { }
+
+
         [HttpPost("register-customer")]
         public async Task<ActionResult> RegisterCustomer(RegisterCustomer.Command command)
         {

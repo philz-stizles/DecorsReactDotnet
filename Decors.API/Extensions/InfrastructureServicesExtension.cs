@@ -4,6 +4,7 @@ using Decors.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace Decors.Infrastructure
 {
@@ -17,10 +18,18 @@ namespace Decors.Infrastructure
             services.AddDbContext<DataDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("AppConnectionString")));
 
+            services.AddSingleton<IConnectionMultiplexer>(c => {
+                var config = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"), true);
+                return ConnectionMultiplexer.Connect(config);
+            });
+
             services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             // services.Configure<EmailSettings>(c => configuration.GetSection("EmailSettings"));
             // services.AddTransient<IEmailService, EmailService>();

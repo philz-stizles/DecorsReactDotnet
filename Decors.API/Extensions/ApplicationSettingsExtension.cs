@@ -11,6 +11,8 @@ namespace Decors.API.Extensions
         {
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+            services.Configure<SendGridSettings>(Configuration.GetSection("SendGridSettings"));
+
 
             return services;
         }

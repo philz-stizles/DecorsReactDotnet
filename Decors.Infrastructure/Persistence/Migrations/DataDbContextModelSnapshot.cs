@@ -72,6 +72,35 @@ namespace Decors.Infrastructure.Persistence.Migrations
                     b.ToTable("Cart");
                 });
 
+            modelBuilder.Entity("Decors.Domain.Entities.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDa")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.ToTable("CartItem");
+                });
+
             modelBuilder.Entity("Decors.Domain.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -186,9 +215,6 @@ namespace Decors.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
 
@@ -196,8 +222,6 @@ namespace Decors.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("UserId");
 
@@ -281,6 +305,44 @@ namespace Decors.Infrastructure.Persistence.Migrations
                     b.ToTable("Permissions");
                 });
 
+            modelBuilder.Entity("Decors.Domain.Entities.Photo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDa")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsMain")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_main");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Photos");
+                });
+
             modelBuilder.Entity("Decors.Domain.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -291,8 +353,20 @@ namespace Decors.Infrastructure.Persistence.Migrations
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDa")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -640,6 +714,13 @@ namespace Decors.Infrastructure.Persistence.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("Decors.Domain.Entities.CartItem", b =>
+                {
+                    b.HasOne("Decors.Domain.Entities.Cart", null)
+                        .WithMany("Items")
+                        .HasForeignKey("CartId");
+                });
+
             modelBuilder.Entity("Decors.Domain.Entities.Coupon", b =>
                 {
                     b.HasOne("Decors.Domain.Entities.Vendor", null)
@@ -658,10 +739,6 @@ namespace Decors.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Decors.Domain.Entities.Document", b =>
                 {
-                    b.HasOne("Decors.Domain.Entities.Product", null)
-                        .WithMany("Documents")
-                        .HasForeignKey("ProductId");
-
                     b.HasOne("Decors.Domain.Entities.User", null)
                         .WithMany("Documents")
                         .HasForeignKey("UserId");
@@ -672,6 +749,13 @@ namespace Decors.Infrastructure.Persistence.Migrations
                     b.HasOne("Decors.Domain.Entities.Vendor", null)
                         .WithMany("Locations")
                         .HasForeignKey("VendorId");
+                });
+
+            modelBuilder.Entity("Decors.Domain.Entities.Photo", b =>
+                {
+                    b.HasOne("Decors.Domain.Entities.Product", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Decors.Domain.Entities.Product", b =>
@@ -777,6 +861,11 @@ namespace Decors.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Decors.Domain.Entities.Cart", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("Decors.Domain.Entities.Permission", b =>
                 {
                     b.Navigation("Roles");
@@ -784,7 +873,7 @@ namespace Decors.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Decors.Domain.Entities.Product", b =>
                 {
-                    b.Navigation("Documents");
+                    b.Navigation("Photos");
 
                     b.Navigation("Reviews");
                 });

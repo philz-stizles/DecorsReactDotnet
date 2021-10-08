@@ -10,6 +10,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="StackExchange.Redis" Version="2.2.50" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
   </ItemGroup>
 
@@ -21,7 +22,6 @@
   <ItemGroup>
     <Folder Include="EmailTemplates\" />
     <Folder Include="Filters\" />
-    <Folder Include="SignalR\" />
   </ItemGroup>
 
 

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Decors.Domain.Entities
+﻿namespace Decors.Domain.Entities
 {
-    public class CartItem
+    public class CartItem: EntityBase
     {
     }
 }

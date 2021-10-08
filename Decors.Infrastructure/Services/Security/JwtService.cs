@@ -10,7 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
-namespace Decors.Infrastructure.Services
+namespace Decors.Infrastructure.Services.Security
 {
     public class JWTService : IJwtService
     {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Security.Claims;
 
-namespace Decors.Infrastructure.Services
+namespace Decors.Infrastructure.Services.Security
 {
     public class UserAccessor: IUserAccessor
     {

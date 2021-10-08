@@ -1,10 +1,9 @@
 ﻿using Decors.Application.Contracts.Services;
 using Decors.Application.Mappers;
 using Decors.Application.Services.Auth;
-using Decors.Infrastructure.Services;
+using Decors.Infrastructure.Services.Security;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace Decors.API.Extensions
 {
