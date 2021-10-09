@@ -43,7 +43,7 @@ namespace Decors.Application.Services.Vendors
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 // Retrieve vendor if it exists.
-                var existingVendor = await _vendorRepository.GetByIdAsync(request.VendorId, "Products");
+                var existingVendor = await _vendorRepository.GetByIdAsync(request.VendorId, "Products", false);
                 if (existingVendor == null)
                 {
                     throw new RestException(HttpStatusCode.NotFound);
@@ -56,17 +56,21 @@ namespace Decors.Application.Services.Vendors
                     throw new RestException(HttpStatusCode.NotFound);
                 }
 
-                // Retrieve category if it exists.
-                var existingCategory = await _categoryRepository.GetByIdAsync(request.CategoryId);
-                if (existingProduct == null)
-                {
-                    throw new RestException(HttpStatusCode.NotFound);
-                }
-
                 // Update exisiting product.
                 existingProduct.Name = request.Name;
                 existingProduct.Description= request.Description;
+                existingProduct.Price = request.Price;
                 existingProduct.LastModifiedBy = _userAccessor.GetCurrentUserId();
+
+                if(existingProduct.Category == null || (existingProduct.Category == null && existingProduct.Category.Id != request.CategoryId))
+                {
+                    // Retrieve category if it exists.
+                    var existingCategory = await _categoryRepository.GetByIdAsync(request.CategoryId);
+                    if (existingCategory != null)
+                    {
+                        existingProduct.Category = existingCategory;
+                    }
+                }
 
                 // Save vendor.
                 await _vendorRepository.UpdateAsync(existingVendor);

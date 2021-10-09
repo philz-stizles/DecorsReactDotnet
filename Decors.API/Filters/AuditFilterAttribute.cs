@@ -52,14 +52,9 @@ namespace Decors.API.Filters
             //                objaudit.LangId = "";
             //            }
 
-            //            if (!string.IsNullOrEmpty(Convert.ToString(filterContext.HttpContext.Session.GetInt32(AllSessionKeys.UserId))))
-            //            {
-            //                objaudit.UserId = Convert.ToString(filterContext.HttpContext.Session.GetInt32(AllSessionKeys.UserId));
-            //            }
-            //            else
-            //            {
-            //                objaudit.UserId = "";
-            //            }
+                        var userId = _userAccessor.GetCurrentUserId();
+                        if (!string.IsNullOrEmpty(userId))
+                            objaudit.UserId = userId;
 
             //            if (!string.IsNullOrEmpty(Convert.ToString(filterContext.HttpContext.Session.GetInt32(AllSessionKeys.RoleId))))
             //            {
