@@ -33,7 +33,7 @@ namespace Decors.Application.Services.Products
                 var existingProduct = await _productRepository.GetByIdAsync(request.Id);
                 if (existingProduct  == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound, "Product does not exist");
+                    throw new RestException(HttpStatusCode.NotFound, "Product does not exist.");
                 }
 
                 return _mapper.Map<ProductDto>(existingProduct);

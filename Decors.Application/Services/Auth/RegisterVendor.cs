@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Decors.Application.Contracts.Repositories;
 using Decors.Application.Contracts.Services;
 using Decors.Application.Exceptions;
 using Decors.Application.Models;
@@ -39,14 +40,16 @@ namespace Decors.Application.Services.Auth
         {
             private readonly UserManager<User> _userManager;
             private readonly RoleManager<Role> _roleManager;
+            private readonly IVendorRepository _vendorRepository;
             private readonly IMapper _mapper;
             private readonly IJwtService _jwtService;
 
-            public Handler(UserManager<User> userManager, RoleManager<Role> roleManager, 
+            public Handler(UserManager<User> userManager, RoleManager<Role> roleManager, IVendorRepository vendorRepository,
                 IMapper mapper, IJwtService jwtService)
             {
                 _userManager = userManager;
                 _roleManager = roleManager;
+                _vendorRepository = vendorRepository;
                 _mapper = mapper;
                 _jwtService = jwtService;
             }
@@ -62,10 +65,20 @@ namespace Decors.Application.Services.Auth
                 // Manually confirm email.
                 newUser.EmailConfirmed = true;
 
+                // Create new user.
                 var result = await _userManager.CreateAsync(newUser, request.Password);
                 if (!result.Succeeded) throw new RestException(HttpStatusCode.BadRequest, new
                 {
                     errors = string.Join(", ", result.Errors.Select(e => e.Description))
+                });
+
+                // Create vendor account.
+                var createdUser = await _userManager.FindByIdAsync(newUser.Id.ToString());
+                var newVendor = await _vendorRepository.AddAsync(new Vendor {
+                    Users = new List<User>
+                    {
+                        createdUser
+                    }
                 });
 
                 return new LoggedInUserDto

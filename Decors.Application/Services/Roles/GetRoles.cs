@@ -31,7 +31,7 @@ namespace Decors.Application.Services.Roles
             public async Task<List<RoleDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 // Retrieve existing roles.
-                var roles = _roleManager.Roles.ToList();
+                var roles = await Task.FromResult(_roleManager.Roles.ToList());
 
                 return _mapper.Map<List<RoleDto>>(roles);
             }

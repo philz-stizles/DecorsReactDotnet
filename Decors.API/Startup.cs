@@ -1,8 +1,10 @@
 using Decors.API.Extensions;
 using Decors.API.Middlewares;
 using Decors.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,9 +13,23 @@ namespace Decors.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+              .SetBasePath(env.ContentRootPath)
+              .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+              .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            if (env.IsEnvironment("Development"))
+            {
+                // Read the configuration keys from the secret store.
+                // Ensure to generate user secret id using "dotnet user-secrets init"
+                builder.AddUserSecrets<Program>();
+            }
+
+            builder.AddEnvironmentVariables();
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -36,22 +52,22 @@ namespace Decors.API
             // Add Application Services.
             services.AddApplicationServices();
 
+            // Add Infrastructure Services.
             services.AddInfrastructureServices(Configuration);
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("BasePolicy", policy =>
-                {
-                    var allowedOrigins = Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>();
-                    policy
-                        .WithOrigins(allowedOrigins)
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-            });
+            // Add Cors Services
+            services.AddCorsServices(Configuration);
 
-            services.AddControllers();
+            // Add Elastic Search Services
+            services.AddElasticSearchServices(Configuration);
+
+            services.AddControllers(options => {
+                var policy = new AuthorizationPolicyBuilder()
+                  .RequireAuthenticatedUser()
+                  .Build();
+
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +88,7 @@ namespace Decors.API
 
             app.UseStaticFiles();
 
-            app.UseCors("BasePolicy");
+            app.UseCorsServices();
 
             // Use Authentication & Authorization Services in Pipeline.
             app.UseAuthServices();

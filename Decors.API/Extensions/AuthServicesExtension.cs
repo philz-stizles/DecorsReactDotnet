@@ -57,7 +57,7 @@ namespace Decors.API.Extensions
             //});
 
             services.AddAuthorization(options => {
-                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireClaim("Admin"));
                 options.AddPolicy("RequireMemberRole", policy => policy.RequireRole("Member"));
             });
 

@@ -5,5 +5,6 @@
         public string GetCurrentUserId();
         public string GetCurrentEmail();
         public string GetCurrentUserName();
+        public string GetCurrentUserIp();
     }
 }

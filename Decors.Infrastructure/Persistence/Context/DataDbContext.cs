@@ -18,6 +18,8 @@ namespace Decors.Infrastructure.Persistence.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
 
+        public DbSet<Audit> Audits { get; set; }
+
         public DataDbContext(DbContextOptions<DataDbContext> options) : base(options)
         {
 

@@ -1,10 +1,12 @@
 ﻿using Decors.Application.Services.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Decors.API.Controllers
 {
+    [AllowAnonymous]
     public class AuthController : BaseController
     {
 
@@ -18,18 +20,18 @@ namespace Decors.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        [Route("/register-customer-with-verification")]
-        public async Task RegisterCustomerWithVerification()
+        [HttpPost("/register-customer-with-verification")]
+        public async Task<ActionResult> RegisterCustomerWithVerification(RegisterCustomer.Command command)
         {
-
+            var result = await Mediator.Send(command);
+            return Ok(result);
         }
 
-        [HttpGet]
-        [Route("/verify-customer")]
-        public async Task VerifyCustomer()
+        [HttpGet("/verify-customer/{token}")]
+        public async Task<ActionResult> VerifyCustomer([FromRoute] string token)
         {
-
+            var result = await Mediator.Send(new VerifyCustomer.Query { Token = token });
+            return Ok(result);
         }
 
         [HttpPost("register-vendor")]
@@ -40,17 +42,19 @@ namespace Decors.API.Controllers
         }
 
         [HttpPost]
-        [Route("/register-business-with-verification")]
-        public async Task RegisterBusinessWithVerification()
+        [Route("/register-vendor-with-verification")]
+        public async Task<ActionResult> RegisterVendorWithVerification(RegisterVendor.Command command)
         {
-
+            var result = await Mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpGet]
         [Route("/verify-business")]
-        public async Task VerifyBusiness()
+        public async Task<ActionResult> VerifyBusiness([FromRoute] string token)
         {
-
+            var result = await Mediator.Send(new VerifyVendor.Query { Token = token });
+            return Ok(result);
         }
 
         [HttpPost]
@@ -63,12 +67,14 @@ namespace Decors.API.Controllers
 
         [HttpPost]
         [Route("/login-with-cookie")]
-        public async Task LoginWithCookie()
+        public async Task<ActionResult> LoginWithCookie(Login.Query query)
         {
-
+            var result = await Mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpGet]
+        [Authorize]
         [Route("/current-user")]
         public async Task<ActionResult> CurrentUser(CurrentUser.Query query)
         {

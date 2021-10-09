@@ -1,5 +1,6 @@
 ﻿using Decors.Application.Contracts.Services;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Linq;
 using System.Security.Claims;
 
@@ -27,6 +28,15 @@ namespace Decors.Infrastructure.Services.Security
         public string GetCurrentUserName()
         {
             return _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+        }
+
+        public string GetCurrentUserIp()
+        {
+            if (_httpContextAccessor.HttpContext == null) {
+                return null;
+            }
+
+            return Convert.ToString(_httpContextAccessor.HttpContext.Connection.RemoteIpAddress);
         }
     }
 }

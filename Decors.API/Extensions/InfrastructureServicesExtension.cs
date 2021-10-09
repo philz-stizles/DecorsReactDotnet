@@ -30,6 +30,7 @@ namespace Decors.Infrastructure
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IAuditRepository, AuditRepository>();
 
             // services.Configure<EmailSettings>(c => configuration.GetSection("EmailSettings"));
             // services.AddTransient<IEmailService, EmailService>();

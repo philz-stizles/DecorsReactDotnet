@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Decors.Application.Contracts.Repositories;
+using Decors.Application.Contracts.Services;
 using Decors.Application.Models;
 using Decors.Domain.Entities;
 using MediatR;
@@ -20,12 +21,15 @@ namespace Decors.Application.Services.Products
 
         public class Handler : IRequestHandler<Command, ProductDto>
         {
+            private readonly IUserAccessor _userAccessor;
             private readonly IProductRepository _productRepository;
             private readonly ICategoryRepository _categoryRepository;
             private readonly IMapper _mapper;
 
-            public Handler(IProductRepository productRepository, ICategoryRepository categoryRepository, IMapper mapper)
+            public Handler(IUserAccessor userAccessor, IProductRepository productRepository, 
+                ICategoryRepository categoryRepository, IMapper mapper)
             {
+                _userAccessor = userAccessor;
                 _productRepository = productRepository;
                 _categoryRepository = categoryRepository;
                 _mapper = mapper;
