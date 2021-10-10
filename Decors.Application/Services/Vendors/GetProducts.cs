@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Decors.Application.Contracts.Repositories;
-using Decors.Application.Contracts.Services;
 using Decors.Application.Exceptions;
 using Decors.Application.Models;
 using MediatR;
@@ -21,21 +20,18 @@ namespace Decors.Application.Services.Vendors
         public class Handler : IRequestHandler<Query, List<ProductDto>>
         {
             private readonly IVendorRepository _vendorRepository;
-            private readonly ICategoryRepository _categoryRepository;
             private readonly IMapper _mapper;
 
-            public Handler(IVendorRepository vendorRepository, 
-                ICategoryRepository categoryRepository, IMapper mapper)
+            public Handler(IVendorRepository vendorRepository, IMapper mapper)
             {
                 _vendorRepository = vendorRepository;
-                _categoryRepository = categoryRepository;
                 _mapper = mapper;
             }
 
             public async Task<List<ProductDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 // Retrieve vendor if exists.
-                var existingVendor = await _vendorRepository.GetByIdAsync(request.VendorId, "Products", false);
+                var existingVendor = await _vendorRepository.GetByIdAsync(request.VendorId, "Products");
                 if(existingVendor == null)
                 {
                     throw new RestException(HttpStatusCode.NotFound, "Vendor does not exist");

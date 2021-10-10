@@ -4,7 +4,6 @@ using Decors.Application.Contracts.Services;
 using Decors.Application.Exceptions;
 using Decors.Application.Models;
 using Decors.Domain.Entities;
-using Decors.Domain.Enums;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Decors.Application.Services.Auth
 {
-    public class RegisterVendor
+    public class RegisterVendorWithEmailVerification
     {
         public class Command : IRequest<LoggedInUserDto>
         {
@@ -72,17 +71,9 @@ namespace Decors.Application.Services.Auth
                 {
                     errors = string.Join(", ", result.Errors.Select(e => e.Description))
                 });
-                
-                // Retrieve newly created user.
-                var createdUser = await _userManager.FindByIdAsync(newUser.Id.ToString());
-
-                // Assign roles to user.
-                await _userManager.AddToRolesAsync(createdUser, new List<string> { RoleTypes.Vendor.ToString() });
-
-                // Retrieve user roles.
-                var userRoles = await _userManager.GetRolesAsync(createdUser);
 
                 // Create vendor account.
+                var createdUser = await _userManager.FindByIdAsync(newUser.Id.ToString());
                 var newVendor = await _vendorRepository.AddAsync(new Vendor {
                     Users = new List<User>
                     {
@@ -93,8 +84,7 @@ namespace Decors.Application.Services.Auth
                 return new LoggedInUserDto
                 {
                     UserDetails = _mapper.Map<UserDto>(newUser),
-                    Token = _jwtService.CreateToken(newUser, new List<string> {}),
-                    Roles = userRoles
+                    Token = _jwtService.CreateToken(newUser, new List<string> {})
                 };
             }
         }

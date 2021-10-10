@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Decors.API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Vendor")]
     [ServiceFilter(typeof(AuditFilterAttribute))]
     public class VendorsController: BaseController
     {

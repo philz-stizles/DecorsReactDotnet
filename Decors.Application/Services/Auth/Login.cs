@@ -57,8 +57,11 @@ namespace Decors.Application.Services.Auth
                 var result = await _signInManager.CheckPasswordSignInAsync(existingUser, request.Password, false);
                 if (!result.Succeeded) throw new RestException(HttpStatusCode.Unauthorized, "Invalid email/password"); ;
 
+                // Retrieve user roles.
+                var userRoles = await _userManager.GetRolesAsync(existingUser);
+
                 // Generate user token
-                var token = _jwtService.CreateToken(existingUser, new List<string>() { });
+                var token = _jwtService.CreateToken(existingUser, userRoles);
 
                 // Map user entity to user dto.
                 var userDto = _mapper.Map<UserDto>(existingUser);
@@ -67,7 +70,8 @@ namespace Decors.Application.Services.Auth
                 return new LoggedInUserDto
                 {
                     UserDetails = userDto,
-                    Token = token
+                    Token = token,
+                    Roles = userRoles
                 };
             }
         }

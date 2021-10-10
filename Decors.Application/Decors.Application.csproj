@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <Folder Include="Services\Documents\" />
+    <Folder Include="Services\Coupons\" />
+    <Folder Include="Services\Transactions\" />
+    <Folder Include="Services\Orders\" />
     <Folder Include="Specifications\" />
     <Folder Include="Validators\" />
   </ItemGroup>

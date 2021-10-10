@@ -1,9 +1,12 @@
-﻿namespace Decors.Application.Models
+﻿using System.Collections.Generic;
+
+namespace Decors.Application.Models
 {
     public class LoggedInUserDto
     {
         public string Token { get; set; }
         public UserDto UserDetails { get; set; }
+        public IList<string> Roles { get; set; }
     }
 
     public class UserDto

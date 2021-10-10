@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Decors.Infrastructure.Presistence.Migrations
+namespace Decors.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(DataDbContext))]
     [Migration("20211009185455_CreateAuditTable")]

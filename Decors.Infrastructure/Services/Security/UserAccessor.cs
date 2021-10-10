@@ -1,6 +1,7 @@
 ﻿using Decors.Application.Contracts.Services;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
@@ -17,16 +18,39 @@ namespace Decors.Infrastructure.Services.Security
 
         public string GetCurrentUserId()
         {
-            return _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            try
+            {
+                if (_httpContextAccessor.HttpContext == null)
+                {
+                    return null;
+                }
+
+                return _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
         }
 
         public string GetCurrentEmail()
         {
+            if (_httpContextAccessor.HttpContext == null)
+            {
+                return null;
+            }
+
             return _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
         }
 
         public string GetCurrentUserName()
         {
+            if (_httpContextAccessor.HttpContext == null)
+            {
+                return null;
+            }
+
             return _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
         }
 
@@ -37,6 +61,24 @@ namespace Decors.Infrastructure.Services.Security
             }
 
             return Convert.ToString(_httpContextAccessor.HttpContext.Connection.RemoteIpAddress);
+        }
+
+        public string GetCurrentUserToken()
+        {
+            return _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+        }
+
+        public List<string> GetCurrentUserRoles()
+        {
+            try
+            {
+                var roles = _httpContextAccessor.HttpContext.User.FindAll(ClaimTypes.Role);
+                return (roles == null) ? new List<string> { "" } : roles.Select(x => x.Value).ToList();
+            }
+            catch (Exception)
+            {
+                return new List<string> { "" };
+            }
         }
     }
 }

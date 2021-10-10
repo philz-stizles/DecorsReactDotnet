@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Decors.Infrastructure.Presistence.Migrations
+namespace Decors.Infrastructure.Persistence.Migrations
 {
     public partial class CreateAuditTable : Migration
     {

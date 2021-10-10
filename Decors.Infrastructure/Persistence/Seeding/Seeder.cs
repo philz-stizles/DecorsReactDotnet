@@ -1,4 +1,5 @@
 ﻿using Decors.Domain.Entities;
+using Decors.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -10,29 +11,28 @@ namespace Decors.Infrastructure.Persistence.Seeding
 {
     public class Seeder
     {
-        public static async Task SeedUsers(UserManager<User> userManager, RoleManager<Role> roleManager)
+        public static async Task SeedUsers(UserManager<User> userManager)
         {
-            await SeedRoles(roleManager);
-
-            if (!userManager.Users.Any())
+            // Create seed users
+            var seedUser = new User
             {
-                // Create Admin User
-                var admin = new User
-                {
-                    UserName = "Admin",
-                    Email = "theophilusighalo@gmail.com"
-                };
-
-                var result = await userManager.CreateAsync(admin, "P@ssw0rd");
+                UserName = "Admin",
+                Email = "theophilusighalo@gmail.com",
+                EmailConfirmed = true
+            };
+            
+            if ((await userManager.FindByNameAsync(seedUser.UserName)) == null)
+            {
+                var result = await userManager.CreateAsync(seedUser, "P@ssw0rd");
                 if (result.Succeeded)
                 {
-                    var newAdmin = userManager.FindByNameAsync("Admin").Result;
-                    await userManager.AddToRolesAsync(newAdmin, new[] { "Admin", "Moderator" });
+                    var newUser = userManager.FindByNameAsync(seedUser.UserName).Result;
+                    await userManager.AddToRolesAsync(newUser, new[] { "Admin" });
                 }
             }
         }
 
-        public static async Task SeedFromJson(UserManager<User> userManager, RoleManager<Role> roleManager)
+        public static async Task SeedUsersFromJson(UserManager<User> userManager, RoleManager<Role> roleManager)
         {
             await SeedRoles(roleManager);
             var json = File.ReadAllText("Data/UserSeedData.json");
@@ -45,13 +45,12 @@ namespace Decors.Infrastructure.Persistence.Seeding
             }
         }
 
-        private static async Task SeedRoles(RoleManager<Role> roleManager)
+        public static async Task SeedRoles(RoleManager<Role> roleManager)
         {
             var roles = new List<Role>{
-                new Role{ Name = "Admin"},
-                new Role{ Name = "Member"},
-                new Role{ Name = "Moderator"},
-                new Role{ Name = "Vip"}
+                new Role{ Name = RoleTypes.Admin.ToString()},
+                new Role{ Name = RoleTypes.Vendor.ToString()},
+                new Role{ Name = RoleTypes.Customer.ToString()},
             };
 
             foreach (var role in roles)
@@ -61,6 +60,19 @@ namespace Decors.Infrastructure.Persistence.Seeding
                     await roleManager.CreateAsync(role);
                 }
             }
+        }
+
+        private static IEnumerable<User> GetPreconfiguredUsers()
+        {
+            return new List<User>
+            {
+                new User
+                {
+                    UserName = "Admin",
+                    Email = "theophilusighalo@gmail.com",
+                    EmailConfirmed = true
+                }
+            };
         }
     }
 }

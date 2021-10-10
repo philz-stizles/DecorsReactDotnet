@@ -31,8 +31,14 @@ namespace Decors.Infrastructure.Services.Security
                 new Claim(ClaimTypes.Name, user.UserName)
             };
 
-            var roleClaims = roles.Select(r => new Claim(ClaimTypes.Role, r));
-            claims.AddRange(roleClaims);
+            // var roleClaims = roles.Select(r => new Claim(ClaimTypes.Role, r));
+            // claims.AddRange(roleClaims);
+
+            // Add all user roles to List of Claims.
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
 

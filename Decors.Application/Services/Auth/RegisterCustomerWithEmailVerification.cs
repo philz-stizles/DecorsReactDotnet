@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
-using Decors.Application.Contracts.Repositories;
 using Decors.Application.Contracts.Services;
 using Decors.Application.Exceptions;
 using Decors.Application.Models;
 using Decors.Domain.Entities;
-using Decors.Domain.Enums;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -16,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Decors.Application.Services.Auth
 {
-    public class RegisterVendor
+    public class RegisterCustomerWithEmailVerification
     {
         public class Command : IRequest<LoggedInUserDto>
         {
@@ -41,16 +38,14 @@ namespace Decors.Application.Services.Auth
         {
             private readonly UserManager<User> _userManager;
             private readonly RoleManager<Role> _roleManager;
-            private readonly IVendorRepository _vendorRepository;
             private readonly IMapper _mapper;
             private readonly IJwtService _jwtService;
 
-            public Handler(UserManager<User> userManager, RoleManager<Role> roleManager, IVendorRepository vendorRepository,
+            public Handler(UserManager<User> userManager, RoleManager<Role> roleManager, 
                 IMapper mapper, IJwtService jwtService)
             {
                 _userManager = userManager;
                 _roleManager = roleManager;
-                _vendorRepository = vendorRepository;
                 _mapper = mapper;
                 _jwtService = jwtService;
             }
@@ -58,43 +53,16 @@ namespace Decors.Application.Services.Auth
             public async Task<LoggedInUserDto> Handle(Command request, CancellationToken cancellationToken)
             {
                 var newUser = _mapper.Map<User>(request);
-                if(string.IsNullOrEmpty(newUser.UserName))
-                {
-                    newUser.UserName = request.Email;
-                }
-
-                // Manually confirm email.
-                newUser.EmailConfirmed = true;
-
-                // Create new user.
                 var result = await _userManager.CreateAsync(newUser, request.Password);
                 if (!result.Succeeded) throw new RestException(HttpStatusCode.BadRequest, new
                 {
                     errors = string.Join(", ", result.Errors.Select(e => e.Description))
                 });
-                
-                // Retrieve newly created user.
-                var createdUser = await _userManager.FindByIdAsync(newUser.Id.ToString());
-
-                // Assign roles to user.
-                await _userManager.AddToRolesAsync(createdUser, new List<string> { RoleTypes.Vendor.ToString() });
-
-                // Retrieve user roles.
-                var userRoles = await _userManager.GetRolesAsync(createdUser);
-
-                // Create vendor account.
-                var newVendor = await _vendorRepository.AddAsync(new Vendor {
-                    Users = new List<User>
-                    {
-                        createdUser
-                    }
-                });
 
                 return new LoggedInUserDto
                 {
                     UserDetails = _mapper.Map<UserDto>(newUser),
-                    Token = _jwtService.CreateToken(newUser, new List<string> {}),
-                    Roles = userRoles
+                    // Token = _jWTGenerator.CreateToken(newUser)
                 };
             }
         }

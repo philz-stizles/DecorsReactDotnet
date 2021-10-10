@@ -28,7 +28,7 @@ namespace Decors.Infrastructure
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICouponRepository,CouponRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IAuditRepository, AuditRepository>();
 

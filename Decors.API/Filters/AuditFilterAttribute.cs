@@ -95,7 +95,7 @@ namespace Decors.API.Filters
                 objaudit.UrlReferrer = header.Referer.AbsoluteUri;
             }
 
-            _auditRepository.AddAsync(objaudit);
+            _auditRepository.AddAsync(objaudit).Wait();
         }
     }
 }

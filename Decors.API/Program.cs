@@ -1,5 +1,6 @@
 using Decors.Domain.Entities;
 using Decors.Infrastructure.Persistence.Context;
+using Decors.Infrastructure.Persistence.Seeding;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,15 @@ namespace Decors.API
                     var roleManager = services.GetRequiredService<RoleManager<Role>>();
 
                     context.Database.Migrate();
-                    // Seeder.SeedUsers(userManager, roleManager).Wait();
+
+                    // Seed claims.
+                    // Seeder.SeedRoles(roleManager).Wait();
+
+                    // Seed roles.
+                    Seeder.SeedRoles(roleManager).Wait();
+
+                    // Seed users.
+                    Seeder.SeedUsers(userManager).Wait();
                 }
                 catch (Exception ex)
                 {

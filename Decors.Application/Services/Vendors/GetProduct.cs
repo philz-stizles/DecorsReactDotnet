@@ -39,7 +39,7 @@ namespace Decors.Application.Services.Vendors
             public async Task<ProductDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 // Retrieve vendor if exists.
-                var existingVendor = await _vendorRepository.GetByIdAsync(request.VendorId, "Products", false);
+                var existingVendor = await _vendorRepository.GetByIdAsync(request.VendorId, "Products");
                 if(existingVendor == null)
                 {
                     throw new RestException(HttpStatusCode.NotFound, "Vendor does not exist");
