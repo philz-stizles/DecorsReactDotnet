@@ -17,6 +17,14 @@
   Get-Migration
 ```
 
+- Update database to a given migration:
+
+```bash
+  Update-database <Migration-Name>
+```
+
+- Remove last migration:
+
 ```bash
   Remove-Migration
 ```

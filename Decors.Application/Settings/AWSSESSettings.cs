@@ -1,6 +1,6 @@
 ﻿namespace Decors.Application.Settings
 {
-    class AWSSESSettings
+    public class AWSSESSettings
     {
         public string ServiceUrl { get; set; }
         public string SMTPHost { get; set; }

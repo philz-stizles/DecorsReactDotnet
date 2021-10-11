@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Decors.Infrastructure.Persistence.Seeding
@@ -58,6 +59,9 @@ namespace Decors.Infrastructure.Persistence.Seeding
                 if (!(await roleManager.RoleExistsAsync(role.Name)))
                 {
                     await roleManager.CreateAsync(role);
+                    /*await roleManager.AddClaimAsync(role, new Claim(CustomClaimTypes.Permission, "projects.view"));
+                    await roleManager.AddClaimAsync(role, new Claim(CustomClaimTypes.Permission, "projects.create"));
+                    await roleManager.AddClaimAsync(role, new Claim(CustomClaimTypes.Permission, "projects.update"));*/
                 }
             }
         }
