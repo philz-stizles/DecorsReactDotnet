@@ -50,7 +50,7 @@ namespace Decors.API
             services.AddAuthServices(Configuration);
 
             // Add Application Services.
-            services.AddApplicationServices();
+            services.AddApplicationServices(Configuration);
 
             // Add Infrastructure Services.
             services.AddInfrastructureServices(Configuration);
@@ -83,6 +83,8 @@ namespace Decors.API
                 // Use Swagger Documentation in Pipeline (only in development environment).
                 app.UseSwaggerDocumentation();
             }
+
+            app.UseApplicationServices();
 
             app.UseRouting();
 

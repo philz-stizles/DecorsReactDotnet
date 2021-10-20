@@ -1,5 +1,27 @@
 # Decors
 
+## User Secrets
+
+    Open terminal in Project root directory: right-click > Open in Terminal
+
+    Add secret:
+      ```bash
+       dotnet user-secrets "JwtSettings:SecretKey" "SomeVeryLongSecret"
+      ```
+
+    List secrets:
+      ```bash
+       dotnet user-secrets list
+      ```
+
+    Remove secret/clear all secrets:
+      ```bash
+        <!-- Remove secret -->
+        dotnet user-secrets remove "JwtSettings:SecretKey"
+        <!-- Clear all secrets -->
+        dotnet user-secrets clear
+      ```
+
 ## Migrations
 
 ```bash
