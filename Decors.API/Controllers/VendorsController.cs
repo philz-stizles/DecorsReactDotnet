@@ -1,6 +1,7 @@
 ﻿using Decors.API.Filters;
 using Decors.Application.Models;
-using Decors.Application.Services.Vendors;
+using Decors.Application.Services.Vendors.Coupons;
+using Decors.Application.Services.Vendors.Products;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -74,10 +75,69 @@ namespace Decors.API.Controllers
             return Ok();
         }
 
-        [HttpPost("{vendorId}/addresses")]
+        [HttpGet("{vendorId:int}/coupons")]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProductDto))]
-        public async Task<ActionResult> CreateAddress([FromRoute] int vendorId, CreateProduct.Command command)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(List<CouponDto>))]
+        public async Task<ActionResult<List<CouponDto>>> GetCoupons([FromRoute] int vendorId)
+        {
+            var result = await Mediator.Send(new GetCoupons.Query
+            {
+                VendorId = vendorId,
+            });
+            return Ok(result);
+        }
+
+        [HttpGet("{vendorId:int}/coupons/{couponId:int}")]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CouponDto))]
+        public async Task<ActionResult<CouponDto>> GetCoupon([FromRoute] int vendorId,
+            [FromRoute] int couponId)
+        {
+            var result = await Mediator.Send(new GetCoupon.Query
+            {
+                VendorId = vendorId,
+                CouponId = couponId
+            });
+            return Ok(result);
+        }
+
+
+        [HttpPost("{vendorId:int}/coupons")]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CouponDto))]
+        public async Task<ActionResult> CreateCoupon([FromRoute] int vendorId, CreateCoupon.Command command)
+        {
+            command.VendorId = vendorId;
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("{vendorId:int}/coupons/{couponId:int}")]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateCoupon([FromRoute] int vendorId, int couponId, UpdateCoupon.Command command)
+        {
+            command.VendorId = vendorId;
+            command.CouponId = couponId;
+            var result = await Mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpDelete("{vendorId}/coupons/{couponId}")]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> ArchiveCoupon([FromRoute] int vendorId, int couponId, ArchiveCoupon.Command command)
+        {
+            command.VendorId = vendorId;
+            command.CouponId = couponId;
+            var result = await Mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpPost("{vendorId}/locations")]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CouponDto))]
+        public async Task<ActionResult> CreateLocation([FromRoute] int vendorId, CreateCoupon.Command command)
         {
             command.VendorId = vendorId;
             var result = await Mediator.Send(command);

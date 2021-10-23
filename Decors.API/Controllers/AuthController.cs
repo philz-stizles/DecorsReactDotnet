@@ -1,4 +1,5 @@
-﻿using Decors.Application.Services.Auth;
+﻿using Decors.API.Filters;
+using Decors.Application.Services.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,7 @@ namespace Decors.API.Controllers
         }
 
         [HttpPost("register-vendor")]
+        // [ServiceFilter(typeof(ApiValidationFilterAttribute))]
         public async Task<ActionResult> RegisterVendor(RegisterVendor.Command command)
         {
             var result = await Mediator.Send(command);

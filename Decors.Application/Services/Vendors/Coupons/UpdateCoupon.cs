@@ -2,26 +2,24 @@
 using Decors.Application.Contracts.Repositories;
 using Decors.Application.Contracts.Services;
 using Decors.Application.Exceptions;
-using Decors.Application.Models;
-using Decors.Domain.Entities;
 using MediatR;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Decors.Application.Services.Vendors
+namespace Decors.Application.Services.Vendors.Coupons
 {
-    public class UpdateProduct
+    public class UpdateCoupon
     {
         public class Command : IRequest
         {
             public int VendorId { get; set; }
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public int CategoryId { get; set; }
-            public decimal Price { get; set; }
+            public int CouponId { get; set; }
+            public string Code { get; set; }
+            public int Discount { get; set; }
+            public DateTime Expires { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -43,34 +41,24 @@ namespace Decors.Application.Services.Vendors
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 // Retrieve vendor if it exists.
-                var existingVendor = await _vendorRepository.GetByIdAsync(request.VendorId, "Products", false);
+                var existingVendor = await _vendorRepository.GetByIdAsync(request.VendorId, "Coupons", false);
                 if (existingVendor == null)
                 {
                     throw new RestException(HttpStatusCode.NotFound);
                 }
 
-                // Retrieve product if it exists.
-                var existingProduct = existingVendor.Products.SingleOrDefault(p => p.Id == request.Id);
-                if (existingProduct == null)
+                // Retrieve coupon if it exists.
+                var existingCoupon = existingVendor.Coupons.SingleOrDefault(c => c.Id == request.CouponId);
+                if (existingCoupon == null)
                 {
                     throw new RestException(HttpStatusCode.NotFound);
                 }
 
-                // Update exisiting product.
-                existingProduct.Name = request.Name;
-                existingProduct.Description= request.Description;
-                existingProduct.Price = request.Price;
-                existingProduct.LastModifiedBy = _userAccessor.GetCurrentUserId();
-
-                if(existingProduct.Category == null || (existingProduct.Category == null && existingProduct.Category.Id != request.CategoryId))
-                {
-                    // Retrieve category if it exists.
-                    var existingCategory = await _categoryRepository.GetByIdAsync(request.CategoryId);
-                    if (existingCategory != null)
-                    {
-                        existingProduct.Category = existingCategory;
-                    }
-                }
+                // Update exisiting coupon.
+                existingCoupon.Code = request.Code;
+                existingCoupon.Discount = request.Discount;
+                existingCoupon.Expires = request.Expires;
+                existingCoupon.LastModifiedBy = _userAccessor.GetCurrentUserId();
 
                 // Save vendor.
                 await _vendorRepository.UpdateAsync(existingVendor);

@@ -11,6 +11,7 @@ import Footer from '../components/layout/Footer/Footer'
 
 // Pages
 const HomePage = lazy(() => import('../pages/Home/HomePage'))
+const AboutPage = lazy(() => import('../pages/About/AboutPage'))
 const LoginPage = lazy(() => import('../pages/Auth/Login/LoginPage'))
 const RegisterPage = lazy(() => import('../pages/Auth/Register/RegisterPage'))
 const ProductsPage = lazy(() => import('../pages/Products/ProductsPage'))
@@ -35,6 +36,10 @@ const Routes = () => {
 
             <PublicRoute path="/" exact isAuthenticated={isAuthenticated}>
               <HomePage />
+            </PublicRoute>
+
+            <PublicRoute path="/about" exact isAuthenticated={isAuthenticated}>
+              <AboutPage />
             </PublicRoute>
 
             <PublicRoute path="/login" isAuthenticated={isAuthenticated}>

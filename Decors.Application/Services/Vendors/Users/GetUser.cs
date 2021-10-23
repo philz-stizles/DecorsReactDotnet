@@ -1,21 +1,18 @@
 ﻿using AutoMapper;
 using Decors.Application.Contracts.Repositories;
 using Decors.Application.Contracts.Services;
-using Decors.Application.Exceptions;
 using Decors.Application.Models;
 using Decors.Domain.Entities;
 using MediatR;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Decors.Application.Services.Vendors
+namespace Decors.Application.Services.Vendors.Users
 {
-    public class ArchiveProduct
+    public class GetUser
     {
         public class Command : IRequest<ProductDto>
         {
-            public int VendorId { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public int Category { get; set; }
@@ -25,39 +22,30 @@ namespace Decors.Application.Services.Vendors
         public class Handler : IRequestHandler<Command, ProductDto>
         {
             private readonly IUserAccessor _userAccessor;
-            private readonly IVendorRepository _vendorRepository;
+            private readonly IProductRepository _productRepository;
             private readonly ICategoryRepository _categoryRepository;
             private readonly IMapper _mapper;
 
-            public Handler(IUserAccessor userAccessor, IVendorRepository vendorRepository, 
+            public Handler(IUserAccessor userAccessor, IProductRepository productRepository, 
                 ICategoryRepository categoryRepository, IMapper mapper)
             {
                 _userAccessor = userAccessor;
-                _vendorRepository = vendorRepository;
+                _productRepository = productRepository;
                 _categoryRepository = categoryRepository;
                 _mapper = mapper;
             }
 
             public async Task<ProductDto> Handle(Command request, CancellationToken cancellationToken)
             {
-                // Retrieve vendor if exists.
-                var existingVendor = await _vendorRepository.GetByIdAsync(request.VendorId, "Products");
-                if(existingVendor == null)
-                {
-                    throw new RestException(HttpStatusCode.NotFound);
-                }
-
-
                 // Map product dto to product entity.
                 var newProduct = _mapper.Map<Product>(request);
 
-                // Add product to vendor products.
-                existingVendor.Products.Add(newProduct);
+                newProduct.Category = await _categoryRepository.GetByIdAsync(request.Category);
 
-                // Save vendor.
-                await _vendorRepository.UpdateAsync(existingVendor);
+                // Create new product.
+                var product = await _productRepository.AddAsync(newProduct);
                     
-                return _mapper.Map<ProductDto>(newProduct);
+                return _mapper.Map<ProductDto>(product);
             }
         }
     }

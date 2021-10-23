@@ -4,13 +4,12 @@ using Decors.Application.Contracts.Services;
 using Decors.Application.Exceptions;
 using Decors.Application.Models;
 using MediatR;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Decors.Application.Services.Vendors
+namespace Decors.Application.Services.Vendors.Products
 {
     public class GetProduct
     {

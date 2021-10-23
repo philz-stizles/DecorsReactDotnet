@@ -1,37 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace Decors.Domain.Enums
 {
-    public enum TransactType
-    {
-        BankAccount = 1,
-    }
-
-    public enum TransactRequestType
-    {
-        GetBalance = 1,
-    }
-
-    public enum QuoteStatus
-    {
-        Pending,
-        Approved,
-        Rejected
-    }
-
-    public enum TransactionStatus
-    {
-        Start = 1,
-        Pending,
-        Processing,
-        Successful,
-        Failed,
-        Reversed
-    }
-
     public enum PaymentStatus
     {
         NotPaid = 1,
@@ -55,69 +25,6 @@ namespace Decors.Domain.Enums
         Dr
     }
 
-    public enum MaritalStatusType
-    {
-        Single = 1,
-        Married
-    }
-
-    // public enum InsuranceType
-    // {
-    //     Motor = 1,
-    //     GeneralAccident,
-    //     ConstructionAndEngineering,
-    //     FireAndSpecialPerils,
-    //     MarineAndAviation,
-    //     SpecialRisk,
-    //     OilAndGas,
-    //     CompulsoryInsurance,
-    //     TravelInsurance
-    // }
-
-    public enum InsuranceType
-    {
-        [Description("Third(3rd) Party Motor Insurance")]
-        ThirdPartyMotorInsurance = 1,
-        [Description("The Enhanced (3rd) Party")]
-        TheEnhancedParty
-    }
-
-
-    public enum VehicleType
-    {
-        Fleet = 1
-    }
-
-    public enum VehicleClassType
-    {
-        [Description("Private Motor")]
-        PrivateMotor = 11,
-        [Description("Commercial Motor(OWN GOODS)")]
-        CommercialMotorOwnGoods,
-        [Description("Commercial Motor(STAFF BUS)")]
-        CommercialMotorTrucksGeneral,
-        [Description("Commercial VehicleTRUCKS/GENERAL CARTAGE")]
-        CommercialVehicle,
-        [Description("Motor Trade(PREMISES RISK)")]
-        MotorTrade,
-        [Description("Special Types (AMBULANCE)")]
-        SpecialTypes,
-        [Description("Motorcycle (POWER BIKE & OFFICIAL RIDE)")]
-        MotorCycle,
-        [Description("Private Cars Only")]
-        PrivateCars = 20,
-        [Description("Private Bus and Pick-up (Owned)")]
-        PrivateBus,
-        [Description("Private Goods Carrying Vehicle (for Insured own goods)")]
-        PrivateGoods
-    }
-
-    public enum PolicyHolderType
-    {
-        Private = 30,
-        Corporate,
-        Comprehensive,
-    }
 
     public enum DocumentType
     {

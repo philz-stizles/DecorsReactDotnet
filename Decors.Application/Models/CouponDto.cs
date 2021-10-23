@@ -1,7 +1,11 @@
-﻿namespace Decors.Application.Models
+﻿using System;
+
+namespace Decors.Application.Models
 {
     public class CouponDto
     {
-        public int Id { get; set; }
+        public string Code { get; set; }
+        public int Discount { get; set; }
+        public DateTime Expires { get; set; }
     }
 }

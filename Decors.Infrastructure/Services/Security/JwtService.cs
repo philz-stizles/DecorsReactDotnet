@@ -44,7 +44,7 @@ namespace Decors.Infrastructure.Services.Security
 
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-            var expires = DateTime.Now.AddMinutes(Convert.ToDouble(_jwtSettings.ExpirationIn));
+            var expires = DateTime.Now.AddMinutes(Convert.ToDouble(_jwtSettings.AuthExpiresIn));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

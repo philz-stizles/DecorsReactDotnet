@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Decors.Domain.Enums;
 
 namespace Decors.Domain.Entities
 {
     public class Order: EntityBase
     {
+        public OrderStatus Status { get; set; }
     }
 }

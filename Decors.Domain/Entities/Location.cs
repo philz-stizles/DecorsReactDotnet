@@ -9,6 +9,6 @@
         public string City { get; set; }
         public string ZipCode { get; set; }
         public decimal Latitude { get; set; }
-        public string Longitude { get; set; }
+        public decimal Longitude { get; set; }
     }
 }

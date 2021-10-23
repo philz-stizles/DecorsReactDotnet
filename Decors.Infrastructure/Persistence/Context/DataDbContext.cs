@@ -17,7 +17,7 @@ namespace Decors.Infrastructure.Persistence.Context
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<Audit> Audits { get; set; }
 
         public DataDbContext(DbContextOptions<DataDbContext> options) : base(options)

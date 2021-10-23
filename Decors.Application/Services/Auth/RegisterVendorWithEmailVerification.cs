@@ -75,9 +75,12 @@ namespace Decors.Application.Services.Auth
                 // Create vendor account.
                 var createdUser = await _userManager.FindByIdAsync(newUser.Id.ToString());
                 var newVendor = await _vendorRepository.AddAsync(new Vendor {
-                    Users = new List<User>
+                    Users = new List<VendorUsers>
                     {
-                        createdUser
+                        new VendorUsers
+                        {
+                            User = createdUser
+                        }
                     }
                 });
 

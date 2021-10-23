@@ -8,6 +8,7 @@
 
         public string SecretKey { get; set; }
 
-        public int ExpirationIn { get; set; }
+        public int AuthExpiresIn { get; set; }
+        public int PasswordResetExpiresIn { get; set; }
     }
 }

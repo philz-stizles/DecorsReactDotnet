@@ -24,16 +24,33 @@ namespace Decors.Application.Services.Auth
             public string LastName { get; set; }
             public string Email { get; set; }
             public string Password { get; set; }
+            public string CompanyName { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Email).NotEmpty();
-                RuleFor(x => x.FirstName).NotEmpty();
-                RuleFor(x => x.LastName).NotEmpty();
-                RuleFor(x => x.Password).NotEmpty();
+                RuleFor(x => x.Email)
+                    .NotNull()
+                    .EmailAddress()
+                    .WithMessage("Please specify an email address.");
+                RuleFor(x => x.FirstName)
+                    .NotNull()
+                    .NotEmpty()
+                    .WithMessage("Please specify a first name."); ;
+                RuleFor(x => x.LastName)
+                    .NotNull()
+                    .NotEmpty()
+                    .WithMessage("Please specify a last name."); ;
+                RuleFor(x => x.Password)
+                    .NotNull()
+                    .NotEmpty()
+                    .WithMessage("Please specify a password."); ;
+                RuleFor(x => x.CompanyName)
+                    .NotNull()
+                    .NotEmpty()
+                    .WithMessage("Please specify a company name."); ;
             }
         }
 
@@ -84,9 +101,12 @@ namespace Decors.Application.Services.Auth
 
                 // Create vendor account.
                 var newVendor = await _vendorRepository.AddAsync(new Vendor {
-                    Users = new List<User>
+                    Name = request.CompanyName,
+                    Users = new List<VendorUsers>
                     {
-                        createdUser
+                        new VendorUsers {
+                            User = createdUser
+                        }
                     }
                 });
 

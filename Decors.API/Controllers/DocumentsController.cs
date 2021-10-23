@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Decors.API.Controllers
 {
-    public class DocumentController : BaseController
+    public class DocumentsController : BaseController
     {
-        public DocumentController(IMediator mediator) : base(mediator) { }
+        public DocumentsController(IMediator mediator) : base(mediator) { }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromForm] UploadPhoto.Command command)

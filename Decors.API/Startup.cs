@@ -1,6 +1,10 @@
 using Decors.API.Extensions;
+using Decors.API.Filters;
 using Decors.API.Middlewares;
+using Decors.API.SignalR;
+using Decors.Application.Services.Auth;
 using Decors.Infrastructure;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -67,7 +71,12 @@ namespace Decors.API
                   .Build();
 
                 options.Filters.Add(new AuthorizeFilter(policy));
+            }).AddFluentValidation(s =>
+            {
+                s.RegisterValidatorsFromAssemblyContaining<RegisterVendor.Handler>();
             });
+
+            services.AddApiValidationService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,6 +107,7 @@ namespace Decors.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                /*endpoints.MapHub<ChatHub>("/chathub");*/
             });
         }
     }

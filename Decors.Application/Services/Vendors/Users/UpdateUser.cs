@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Decors.Application.Services.Vendors
 {
-    public class CreateUser
+    public class UpdateUser
     {
         public class Command : IRequest<ProductDto>
         {

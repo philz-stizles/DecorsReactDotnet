@@ -8,16 +8,16 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Decors.Application.Services.Vendors
+namespace Decors.Application.Services.Vendors.Coupons
 {
-    public class GetProducts
+    public class GetCoupons
     {
-        public class Query : IRequest<List<ProductDto>>
+        public class Query : IRequest<List<CouponDto>>
         {
             public int VendorId { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, List<ProductDto>>
+        public class Handler : IRequestHandler<Query, List<CouponDto>>
         {
             private readonly IVendorRepository _vendorRepository;
             private readonly IMapper _mapper;
@@ -28,18 +28,18 @@ namespace Decors.Application.Services.Vendors
                 _mapper = mapper;
             }
 
-            public async Task<List<ProductDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<CouponDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 // Retrieve vendor if exists.
-                var existingVendor = await _vendorRepository.GetByIdAsync(request.VendorId, "Products");
+                var existingVendor = await _vendorRepository.GetByIdAsync(request.VendorId, "Coupons");
                 if(existingVendor == null)
                 {
                     throw new RestException(HttpStatusCode.NotFound, "Vendor does not exist");
                 }
 
                 // Add product to vendor products.
-                var vendorProducts = existingVendor.Products;
-                return _mapper.Map<List<ProductDto>>(vendorProducts);
+                var vendorCoupons = existingVendor.Coupons;
+                return _mapper.Map<List<CouponDto>>(vendorCoupons);
             }
         }
     }
