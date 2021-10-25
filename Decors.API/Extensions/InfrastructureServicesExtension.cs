@@ -1,10 +1,12 @@
 ﻿using Decors.Application.Contracts.Repositories;
 using Decors.Application.Contracts.Services;
+using Decors.Infrastructure.Persistence.Caching;
 using Decors.Infrastructure.Persistence.Context;
 using Decors.Infrastructure.Persistence.Repositories;
 using Decors.Infrastructure.Services.Client;
 using Decors.Infrastructure.Services.MessageQueue;
 using Decors.Infrastructure.Services.Notifications;
+using Decors.Infrastructure.Services.Payment;
 using Decors.Infrastructure.Services.Security;
 using Decors.Infrastructure.Services.Storage;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +59,7 @@ namespace Decors.Infrastructure
             services.AddScoped<ICouponRepository,CouponRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IAuditRepository, AuditRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
 
             // Service injections.
             services.AddScoped<IJwtService, JWTService>();
@@ -68,6 +71,8 @@ namespace Decors.Infrastructure
             services.AddScoped<IHttpService, HttpService>();
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddSingleton<IResponseCacheService, ResponseCacheService>();
 
             return services;
         }

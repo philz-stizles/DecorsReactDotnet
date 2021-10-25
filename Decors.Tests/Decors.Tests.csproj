@@ -28,7 +28,6 @@
   <ItemGroup>
     <Folder Include="Domain\" />
     <Folder Include="Infrastructure\Services\" />
-    <Folder Include="Infrastructure\Repositories\" />
   </ItemGroup>
 
 </Project>

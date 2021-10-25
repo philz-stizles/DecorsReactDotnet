@@ -2,10 +2,12 @@
 using Decors.Application.Models;
 using Decors.Application.Services.Vendors.Coupons;
 using Decors.Application.Services.Vendors.Products;
+using Decors.Application.Services.Vendors.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -132,6 +134,43 @@ namespace Decors.API.Controllers
             command.CouponId = couponId;
             var result = await Mediator.Send(command);
             return Ok();
+        }
+
+        [HttpGet("{vendorId:int}/users")]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(List<UserDto>))]
+        public async Task<ActionResult<List<CouponDto>>> GetUsers([FromRoute] int vendorId)
+        {
+            var result = await Mediator.Send(new GetUsers.Query
+            {
+                VendorId = vendorId,
+            });
+            return Ok(result);
+        }
+
+        [HttpGet("{vendorId:int}/users/{userId}")]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserDto))]
+        public async Task<ActionResult<CouponDto>> GetUser([FromRoute] int vendorId,
+            [FromRoute] Guid userId)
+        {
+            var result = await Mediator.Send(new GetUser.Query
+            {
+                VendorId = vendorId,
+                UserId = userId
+            });
+            return Ok(result);
+        }
+
+
+        [HttpPost("{vendorId:int}/users")]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserDto))]
+        public async Task<ActionResult> CreateUser([FromRoute] int vendorId, CreateUser.Command command)
+        {
+            command.VendorId = vendorId;
+            var result = await Mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpPost("{vendorId}/locations")]

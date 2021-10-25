@@ -3,6 +3,7 @@ using Decors.Application.Contracts.Repositories;
 using Decors.Application.Contracts.Services;
 using Decors.Application.Exceptions;
 using MediatR;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -59,8 +60,9 @@ namespace Decors.Application.Services.Vendors.Products
                 existingProduct.Description= request.Description;
                 existingProduct.Price = request.Price;
                 existingProduct.LastModifiedBy = _userAccessor.GetCurrentUserId();
+                existingProduct.LastModifiedDate = DateTime.Now;
 
-                if(existingProduct.Category == null || (existingProduct.Category == null && existingProduct.Category.Id != request.CategoryId))
+                if (existingProduct.Category == null || (existingProduct.Category == null && existingProduct.Category.Id != request.CategoryId))
                 {
                     // Retrieve category if it exists.
                     var existingCategory = await _categoryRepository.GetByIdAsync(request.CategoryId);

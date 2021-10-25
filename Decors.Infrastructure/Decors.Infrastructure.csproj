@@ -18,11 +18,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+    <PackageReference Include="Stripe.net" Version="39.74.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.13.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Persistence\Caching\" />
     <Folder Include="Services\Schedulers\" />
     <Folder Include="Services\SocialLogin\" />
   </ItemGroup>

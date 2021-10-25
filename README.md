@@ -50,3 +50,9 @@
 ```bash
   Remove-Migration
 ```
+
+## Payments
+
+    PCI DSS Compliance:
+
+    Web hooks:

@@ -1,51 +1,60 @@
 ﻿using AutoMapper;
 using Decors.Application.Contracts.Repositories;
 using Decors.Application.Contracts.Services;
+using Decors.Application.Exceptions;
 using Decors.Application.Models;
-using Decors.Domain.Entities;
 using MediatR;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Decors.Application.Services.Vendors
+namespace Decors.Application.Services.Vendors.Users
 {
     public class GetUsers
     {
-        public class Command : IRequest<ProductDto>
+        public class Query : IRequest<List<UserDto>>
         {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public int Category { get; set; }
-            public decimal Price { get; set; }
+            public int VendorId { get; set; }
+            public int Page { get; set; }
+            public int Size { get; set; }
+            public string Search { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command, ProductDto>
+        public class Handler : IRequestHandler<Query, List<UserDto>>
         {
             private readonly IUserAccessor _userAccessor;
-            private readonly IProductRepository _productRepository;
-            private readonly ICategoryRepository _categoryRepository;
+            private readonly IVendorRepository _vendorRepository;
             private readonly IMapper _mapper;
 
-            public Handler(IUserAccessor userAccessor, IProductRepository productRepository, 
-                ICategoryRepository categoryRepository, IMapper mapper)
+            public Handler(IUserAccessor userAccessor, IVendorRepository vendorRepository, IMapper mapper)
             {
                 _userAccessor = userAccessor;
-                _productRepository = productRepository;
-                _categoryRepository = categoryRepository;
+                _vendorRepository = vendorRepository;
                 _mapper = mapper;
             }
 
-            public async Task<ProductDto> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<List<UserDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                // Map product dto to product entity.
-                var newProduct = _mapper.Map<Product>(request);
+                // Retrieve vendor if exists.
+                var existingVendor = await _vendorRepository.GetByIdIncludeUser(request.VendorId);
+                if (existingVendor == null)
+                {
+                    throw new RestException(HttpStatusCode.NotFound, "Vendor does not exist");
+                }
 
-                newProduct.Category = await _categoryRepository.GetByIdAsync(request.Category);
+                // Retrieve vendor users.
+                var vendorUsers = existingVendor.Users;
 
-                // Create new product.
-                var product = await _productRepository.AddAsync(newProduct);
-                    
-                return _mapper.Map<ProductDto>(product);
+                // Verify user.
+                var existingUser = vendorUsers.FirstOrDefault(u => u.UserId.ToString() == _userAccessor.GetCurrentUserId());
+                if (existingUser == null)
+                {
+                    throw new RestException(HttpStatusCode.Unauthorized);
+                }
+
+                return _mapper.Map<List<UserDto>>(vendorUsers);
             }
         }
     }

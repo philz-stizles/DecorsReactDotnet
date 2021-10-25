@@ -1,18 +1,22 @@
-﻿using System.ComponentModel;
+﻿using System.Runtime.Serialization;
 
 namespace Decors.Domain.Enums
 {
     public enum OrderStatus
     {
-        [Description("Not Processed")]
-        NotProcessed = 1,
-        [Description("Processing")]
+        [EnumMember(Value ="Pending")]
+        Pending = 1,
+        [EnumMember(Value ="Processing")]
         Processing,
-        [Description("Dispatched")]
+        [EnumMember(Value ="Dispatched")]
         Dispatched,
-        [Description("Cancelled")]
+        [EnumMember(Value ="Cancelled")]
         Cancelled,
-        [Description("Completed")]
+        [EnumMember(Value ="Payment Received")]
+        PaymentReceived,
+        [EnumMember(Value ="Payment Failed")]
+        PaymentFailed,
+        [EnumMember(Value ="Completed")]
         Completed
     }
 }

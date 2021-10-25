@@ -13,7 +13,7 @@ namespace Decors.Infrastructure.Persistence.Context
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Cart> Cart { get; set; }
+        // public DbSet<Cart> Cart { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Transaction> Transactions { get; set; }

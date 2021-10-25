@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Models\ViewModels\" />
     <Folder Include="Services\Documents\" />
     <Folder Include="Services\Transactions\" />
-    <Folder Include="Services\Orders\" />
     <Folder Include="Specifications\" />
     <Folder Include="Validators\" />
   </ItemGroup>
@@ -25,7 +25,9 @@
     <PackageReference Include="Hangfire.SqlServer" Version="1.7.25" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="NEST" Version="7.15.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="StackExchange.Redis" Version="2.2.79" />
   </ItemGroup>
 
   <ItemGroup>
